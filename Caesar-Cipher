@@ -1,0 +1,73 @@
+import urllib
+from collections import Counter
+print("1) Encrypt file")
+print("2) Decrypt file")
+print("3) Decrypt without key")
+print("4) Frequency analysis")
+ch=int(input("Enter choice:"))
+file1=open('plaintext.txt', 'r')
+file2=open('ciphertext.txt', 'r+')
+
+if(ch==1):
+	da = file1.read().replace(" ", "")
+	key=int(input("Enter key:"))
+	d=list(da)
+	for c in d:
+		x=chr((ord(c) + key) % 128)
+		file2.write(x)
+	file2.close()
+elif(ch==2):
+	key=input("Enter key:")
+	file2=open('ciphertext.txt', 'r+')
+	data1 = file2.read()
+	d1=list(data1)
+	cipher=""
+	for c1 in d1:
+		x=chr((ord(c1)-key)%128)
+		cipher=cipher+x
+	print(cipher)
+elif(ch==3):
+	file2=open('ciphertext.txt', 'r')
+	file3=open('pt.txt','w')
+	data1 = file2.read()
+	d1=list(data1)
+	for n in range(128):
+		cipher=''
+		file3.write(cipher)
+		for c1 in d1:
+			cipher+=chr((ord(c1)-n+128)%128)
+		print(cipher)
+		z=raw_input("YES or NO:")
+		if(z=='y'):
+			print(cipher)
+			file3.write(cipher)
+			break
+else:
+
+	file1 = open("ciphertext.txt", "r")
+	data = file1.read()
+	d = list(data)
+	freq = {}
+	f = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'd', 'l', 'u', 'c', 'm', 'f', 'y', 'w', 'g', 'p', 'b', 'v', 'k',
+		 'x', 'q', 'j', 'z']
+	for ele in d:
+		if ele in freq:
+			freq[ele] += 1
+		else:
+			freq[ele] = 1
+	print(freq)
+	max_key = max(freq, key=lambda k: freq[k])
+	print(max_key)
+	while True:
+		for i in f:
+			cipher = ""
+			for c in d:
+				y = int(ord(max_key) - ord(i))
+				print(y)
+				x = chr((ord(c) - y) % 128)
+				cipher = cipher + x
+			print(cipher)
+			choice = str(input("Is the textreadable?"))
+			if (choice == 'y'):
+				break
+		break
