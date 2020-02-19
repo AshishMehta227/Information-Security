@@ -1,0 +1,87 @@
+file1 = open("plaintext.txt", "r")
+key = int(input("Enter depth:"))
+
+s = file1.read().replace(" ", "")
+s = list(s)
+
+matrix = [['' for i in range(len(s))] for j in range(key)]
+i = 0;
+check = True;
+for j in range(len(s)):
+	if (check == True):
+		matrix[i][j] = s[j]
+		i = i + 1
+		if (i == key):
+			i = i - 1
+			check = False;
+
+	elif (check == False):
+		i = i - 1
+		matrix[i][j] = s[j]
+		if (i == 0):
+			i = i + 1
+			check = True;
+
+en_str = ""
+
+for i in range(key):
+	for j in range(len(s)):
+		en_str = en_str + matrix[i][j]
+
+print("Encrypted Text: \n" + en_str + "\n")
+# Decryption
+print("\nDecryption:\n")
+enc = list(en_str)
+while True:
+	for i in range(2, len(enc)):
+		ind = 0
+		matrix = [['' for i in range(len(enc))] for j in range(i)]
+		key = i
+		for j in range(i):
+			# for k in range(j,len(enc),((2*key)-2)):
+			k = j
+			check = True
+			while (k < len(enc)):
+				matrix[j][k] = enc[ind]
+				ind = ind + 1
+				if (i < 4):
+					if (key != 1):
+						k = k + ((2 * key) - 2)
+					elif (key == 1 and i > 2):
+						k = k + ((2 * i) - 2)
+					else:
+						k = k + (2 * key)
+				else:
+					if (j == 0 or j == (i - 1)):
+						k = k + ((2 * i) - 2)
+					else:
+						if (check == True):
+							k = k + abs(((2 * key) - 2))
+							check = False
+						else:
+							k = k + (2 * (i - key))
+							check = True
+			else:
+				key = key - 1
+		pt = ""
+		m = 0
+		check = True
+		for n in range(len(enc)):
+			if (check == True):
+				pt = pt + matrix[m][n]
+				m = m + 1
+				if (m == i):
+					m = m - 1
+					check = False
+
+			elif (check == False):
+				m = m - 1
+				pt = pt + matrix[m][n]
+				if (m == 0):
+					m = m + 1
+					check = True
+		print(pt + "\n")
+		ch = str(input("Is the text readable?"))
+		if (ch == 'y'):
+			print("Key is:", i)
+			exit(0)
