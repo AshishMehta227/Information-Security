@@ -1,0 +1,44 @@
+import re
+file1=open("plaintext.txt","r")
+k1=int(input("Enter the key 1: "))
+k2=int(input("Enter the key 2: "))
+ptext=file1.read().replace(" ","")
+ptext=ptext.lower()
+ptext=re.sub('[^a-zA-Z]', '', ptext)
+pt=list(ptext)
+flag=0
+#checking validity
+while(1):
+	for i in range(26):
+		x=(k1*i) % 26
+		if(x==1):
+			inv=i
+			flag=1
+		if(flag==1):
+			break
+	if(flag==0):
+		k1 = int(input("Enter a valid key 1: "))
+	else:
+		break
+
+alpha = ['' for i in range(26)]
+x=97
+for i in range(26):
+	alpha[i]=chr(x)
+	x+=1
+ctext=[]
+for i in pt:
+	ctext.append(alpha[(((alpha.index(i)*k1)+k2)%26)])
+ct=""
+for i in ctext:
+	ct=ct+i
+print("Encrypted text: ",ct)
+
+plaint=[]
+for i in ctext:
+	plaint.append(alpha[((((alpha.index(i)-k2)%26)*inv)%26)])
+
+pt=""
+for i in plaint:
+	pt=pt+i
+print("Decrypted Text: ",pt)
