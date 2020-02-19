@@ -1,0 +1,92 @@
+k=str(input("Enter the key:"))
+file1=open("ptext.txt","r")
+k=''.join(k.split())
+c=file1.read().replace(" ","")
+c=c.lower()
+p=list(c)
+pt=''
+for x in p:
+	if(x.isalnum()):
+		pt=pt+x
+ke=list(k)
+matrix = [['' for i in range(6)] for j in range(6)]
+alpha=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9']
+key=[]
+for x in ke:
+		if x not in key:
+			key.append(x)
+for x in alpha:
+	if x not in key:
+		key.append(x)
+lkey=len(key)
+z=0
+for i in range(6):
+	for j in range(6):
+		if(z<lkey):
+			matrix[i][j]=key[z]
+			z+=1
+print(matrix,"\n")
+ptext=list(pt)
+print(ptext)
+for i in range(0,len(ptext),2):
+	if(ptext[i]==ptext[i+1]):
+		ptext.insert(i+1,'x')
+lpt=len(ptext)
+if((lpt%2)!=0):
+	ptext.append('z')
+	lpt+=1
+def coords(a):
+	for i in range(6):
+		for j in range(6):
+			if(a==matrix[i][j]):
+				return i,j
+def nextchar(i,j,p):
+	if(p==1):
+		return matrix[i][(j+1)%6]
+	if(p==2):
+		return matrix[(i+1)%6][j]
+ctext=[]
+for i in range(0,lpt,2):
+	m=i
+	n=i+1
+	x1,y1=coords(ptext[m])
+	x2,y2=coords(ptext[n])
+	if(x1==x2):
+		ctext.append(nextchar(x1,y1,1))
+		ctext.append(nextchar(x2,y2,1))
+	elif(y1==y2):
+		ctext.append(nextchar(x1,y1,2))
+		ctext.append(nextchar(x2,y2,2))
+	else:
+		ctext.append(matrix[x2][y1])
+		ctext.append(matrix[x1][y2])
+print("ENCRYPTION\n")
+print(ctext,"\n")
+print("DECRYPTION\n")
+
+def prevchar(i,j,p):
+	if(p==1):
+		return matrix[i][(j-1)%6]
+	if(p==2):
+		return matrix[(i-1)%6][j]
+
+dptext=[]
+for i in range(0,lpt,2):
+	m=i
+	n=i+1
+	x1,y1=coords(ctext[m])
+	x2,y2=coords(ctext[n])
+	if(x1==x2):
+		dptext.append(prevchar(x1,y1,1))
+		dptext.append(prevchar(x2,y2,1))
+	elif(y1==y2):
+		dptext.append(prevchar(x1,y1,2))
+		dptext.append(prevchar(x2,y2,2))
+	else:
+		dptext.append(matrix[x2][y1])
+		dptext.append(matrix[x1][y2])
+
+for i in dptext:
+	if(i=='x' or i=='z'):
+		del dptext[dptext.index(i)]
+print(dptext)
