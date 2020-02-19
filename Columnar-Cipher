@@ -1,0 +1,38 @@
+file1="Hello my name is Github Developer"
+k=str(input("Enter the key: "))
+ptext=file1.replace(" ","")
+pt=list(ptext)
+key=list(k)
+lpt=round(len(ptext)/len(k))
+ematrix = [['' for i in range(len(k))] for j in range(lpt)]
+z=0
+for i in range(lpt):
+	for j in range(len(k)):
+		if(z<len(pt)):
+			ematrix[i][j]=pt[z]
+		else:
+			ematrix[i][j]='x'
+		z=z+1
+lkey=sorted(key)
+ctext=[]
+for i in range(len(k)):
+	x=lkey.index(key[i])
+	for j in range(lpt):
+		ctext.append(ematrix[j][x])
+ct=""
+for i in range(len(ctext)):
+	ct=ct+ctext[i]
+print("Encrypted text: ",ct)
+dmatrix = [['' for i in range(len(k))] for j in range(lpt)]
+z=0
+for i in range(len(k)):
+	x=key.index(lkey[i])
+	for j in range(lpt):
+		dmatrix[j][x]=ctext[z]
+		z=z+1
+pt=""
+for i in range(lpt):
+	for j in range(len(k)):
+		if(dmatrix[i][j]!='x'):
+			pt=pt+dmatrix[i][j]
+print("Decrypted text: ",pt)
